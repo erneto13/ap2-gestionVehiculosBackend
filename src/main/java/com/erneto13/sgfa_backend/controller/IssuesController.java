@@ -27,10 +27,15 @@ public class IssuesController {
         return new ResponseEntity<>(issues, HttpStatus.OK);
     }
 
-    @GetMapping("/issue-list/{issue_type}")
+    @GetMapping("/issues-list/{issue_type}")
     public ResponseEntity<?> getIssueByType(@PathVariable String issue_type) {
         List<IssuesModel> issues = this.iIssueService.getIssueByType(issue_type);
         return new ResponseEntity<>(issues, HttpStatus.OK);
     }
 
+    @GetMapping("/issues-list/status/{status}")
+    public ResponseEntity<?> getIssueByStatus(@PathVariable String status) {
+        List<IssuesModel> issues = this.iIssueService.getIssueByStatus(status);
+        return new ResponseEntity<>(issues, HttpStatus.OK);
+    }
 }
