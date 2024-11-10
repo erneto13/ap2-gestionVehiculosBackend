@@ -25,4 +25,10 @@ public class IssuesRepository implements IIssuesRepository {
         String query = "SELECT * FROM issues WHERE issue_type = ?";
         return jdbcTemplate.query(query, new Object[]{type}, BeanPropertyRowMapper.newInstance(IssuesModel.class));
     }
+
+    @Override
+    public List<IssuesModel> findByStatus(String status) {
+        String query = "SELECT * FROM issues WHERE status = ?";
+        return jdbcTemplate.query(query, new Object[]{status}, BeanPropertyRowMapper.newInstance(IssuesModel.class));
+    }
 }
