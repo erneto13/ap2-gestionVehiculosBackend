@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SgfaBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SgfaBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SgfaBackendApplication.class, args);
+    }
 
 }
