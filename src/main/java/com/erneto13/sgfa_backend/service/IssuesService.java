@@ -34,4 +34,15 @@ public class IssuesService implements IIssuesService {
         }
         return list;
     }
+
+    @Override
+    public List<IssuesModel> getIssueByStatus(String status) {
+        List<IssuesModel> list;
+        try {
+            list = iIssuesRepository.findByStatus(status);
+        } catch (Exception ex) {
+            throw ex;
+        }
+        return list;
+    }
 }
