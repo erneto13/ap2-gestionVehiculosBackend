@@ -7,4 +7,5 @@ import java.util.List;
 public interface IIssuesRepository {
     public List<IssuesModel> findAll();
     public List<IssuesModel> findByIssueType(String type);
+    public List<IssuesModel> findByStatus(String status);
 }
