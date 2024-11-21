@@ -2,6 +2,7 @@ package com.erneto13.sgfa_backend.controller;
 
 import com.erneto13.sgfa_backend.dto.AuthRequestDto;
 import com.erneto13.sgfa_backend.dto.AuthResponseDto;
+import com.erneto13.sgfa_backend.model.UserModel;
 import com.erneto13.sgfa_backend.repository.UserRepository;
 import com.erneto13.sgfa_backend.service.JwtUtilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.erneto13.sgfa_backend.model.UserModel;
 
 import java.util.Map;
 

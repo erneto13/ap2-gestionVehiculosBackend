@@ -1,6 +1,6 @@
 package com.erneto13.sgfa_backend.repository;
 
-import com.erneto13.sgfa_backend.model.ContactsModel;
+import com.erneto13.sgfa_backend.model.ContactModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,9 +15,9 @@ public class ContactsRepository implements IContactsResository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<ContactsModel> findAll() {
+    public List<ContactModel> findAll() {
         String SQL = "SELECT * FROM contacts";
-        return jdbcTemplate.query(SQL, BeanPropertyRowMapper.newInstance(ContactsModel.class));
+        return jdbcTemplate.query(SQL, BeanPropertyRowMapper.newInstance(ContactModel.class));
     }
 
 }

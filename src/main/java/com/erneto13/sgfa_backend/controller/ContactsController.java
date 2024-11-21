@@ -1,6 +1,6 @@
 package com.erneto13.sgfa_backend.controller;
 
-import com.erneto13.sgfa_backend.model.ContactsModel;
+import com.erneto13.sgfa_backend.model.ContactModel;
 import com.erneto13.sgfa_backend.service.IContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class ContactsController {
 
     @GetMapping("/contact-list")
     public ResponseEntity<?> list() {
-        List<ContactsModel> contacts = this.iContactsService.findAll();
+        List<ContactModel> contacts = this.iContactsService.findAll();
         return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
 

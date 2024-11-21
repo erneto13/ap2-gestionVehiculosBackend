@@ -24,14 +24,14 @@ public class SecurityConfig {
     private JwtRequestFilter jwtRequestFilter;
 
     @Bean
-    SecurityFilterChain web(HttpSecurity http) throws Exception{
+    SecurityFilterChain web(HttpSecurity http) throws Exception {
         http
                 .cors(withDefaults())
                 .csrf(crf -> crf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                .anyRequest().authenticated()
-                        )
+                        .requestMatchers("/api/v1/auth/**", "/media/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -41,13 +41,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder () {
-        return  new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return  authenticationConfiguration.getAuthenticationManager();
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
 

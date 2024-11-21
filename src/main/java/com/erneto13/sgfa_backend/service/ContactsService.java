@@ -1,7 +1,7 @@
 package com.erneto13.sgfa_backend.service;
 
 
-import com.erneto13.sgfa_backend.model.ContactsModel;
+import com.erneto13.sgfa_backend.model.ContactModel;
 import com.erneto13.sgfa_backend.repository.IContactsResository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ public class ContactsService implements IContactsService {
     private IContactsResository iContactsResository;
 
     @Override
-    public List<ContactsModel> findAll() {
-        List<ContactsModel> list;
+    public List<ContactModel> findAll() {
+        List<ContactModel> list;
         try {
             list = iContactsResository.findAll();
         } catch (Exception ex) {

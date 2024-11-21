@@ -3,7 +3,7 @@ package com.erneto13.sgfa_backend.model;
 import lombok.Data;
 
 @Data
-public class ContactsModel {
+public class ContactModel {
     Integer idcontact;
     String name;
     String company;
