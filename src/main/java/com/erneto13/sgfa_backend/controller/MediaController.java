@@ -31,7 +31,7 @@ public class MediaController {
                 request.getRequestURI(), "");
         String url = ServletUriComponentsBuilder
                 .fromHttpUrl(host)
-                .path("/src/main/resources/static/media/")
+                .path("/media/")
                 .path(path)
                 .toUriString();
         return Map.of("url", url);
@@ -47,7 +47,7 @@ public class MediaController {
                     request.getRequestURI(), "");
             String url = ServletUriComponentsBuilder
                     .fromHttpUrl(host)
-                    .path("/src/main/resources/static/media/")
+                    .path("/media/")
                     .path(path)
                     .toUriString();
             urls.add(url);
