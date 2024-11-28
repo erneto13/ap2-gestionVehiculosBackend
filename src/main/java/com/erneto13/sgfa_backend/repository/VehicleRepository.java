@@ -23,16 +23,22 @@ public class VehicleRepository implements IVehicleRepository {
 
     @Override
     public int pushVehicle(VehicleModel vehicle) {
-        String sql = "INSERT INTO vehicles (license_plate, make, model, status, type_vehicle, image_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vehicles (license_plate, brand, model, year, color, transmission_type, fuel_type, engine_type, type, status, registration_date, image_url) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         return jdbcTemplate.update(sql,
-                vehicle.getLicensePlate(),
-                vehicle.getMake(),
+                vehicle.getLicense_plate(),
+                vehicle.getBrand(),
                 vehicle.getModel(),
+                vehicle.getYear(),
+                vehicle.getColor(),
+                vehicle.getTransmission_type(),
+                vehicle.getFuel_type(),
+                vehicle.getEngine_type(),
+                vehicle.getType(),
                 vehicle.getStatus(),
-                vehicle.getType_vehicle(),
-                vehicle.getImageUrl(),
-                vehicle.getCreatedAt(),
-                vehicle.getUpdatedAt()
+                vehicle.getRegistration_date(),
+                vehicle.getImage_url()
         );
     }
 }
