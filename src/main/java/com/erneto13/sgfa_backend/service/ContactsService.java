@@ -3,6 +3,7 @@ package com.erneto13.sgfa_backend.service;
 
 import com.erneto13.sgfa_backend.model.ContactModel;
 import com.erneto13.sgfa_backend.repository.IContactsResository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +13,29 @@ import java.util.List;
 public class ContactsService implements IContactsService {
 
     @Autowired
-    private IContactsResository iContactsResository;
+    private IContactsResository contactRepository;
 
     @Override
-    public List<ContactModel> findAll() {
-        List<ContactModel> list;
-        try {
-            list = iContactsResository.findAll();
-        } catch (Exception ex) {
-            throw ex;
+    public List<ContactModel> getAllContacts() {
+        return contactRepository.findAll();
+    }
+
+    @Override
+    public ContactModel getContactById(Long id) {
+        return contactRepository.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("contact not found with id " + id));
+    }
+
+    @Override
+    public ContactModel createContact(ContactModel contact) {
+        return contactRepository.save(contact);
+    }
+
+    @Override
+    public void deleteContact(Long id) {
+        if (!contactRepository.existsById(id)) {
+            throw new EntityNotFoundException("contact not found with id: " + id);
         }
-        return list;
+        contactRepository.deleteById(id);
     }
 }
