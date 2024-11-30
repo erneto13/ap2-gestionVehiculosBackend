@@ -1,18 +1,13 @@
 package com.erneto13.sgfa_backend.controller;
 
-import com.erneto13.sgfa_backend.model.BookingModel;
 import com.erneto13.sgfa_backend.model.VehicleModel;
-import com.erneto13.sgfa_backend.service.BookingService;
 import com.erneto13.sgfa_backend.service.VehicleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @CrossOrigin("*")
