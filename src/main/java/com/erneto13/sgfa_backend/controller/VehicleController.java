@@ -1,8 +1,9 @@
 package com.erneto13.sgfa_backend.controller;
 
-import com.erneto13.sgfa_backend.model.IssueModel;
+import com.erneto13.sgfa_backend.model.BookingModel;
 import com.erneto13.sgfa_backend.model.VehicleModel;
-import com.erneto13.sgfa_backend.service.IVehicleService;
+import com.erneto13.sgfa_backend.service.BookingService;
+import com.erneto13.sgfa_backend.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,30 +16,22 @@ import java.util.Map;
 
 @Controller
 @CrossOrigin("*")
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/vehicles")
 public class VehicleController {
 
-    @Autowired
-    IVehicleService iVehicleService;
+    private final VehicleService vehicleService;
 
-    @GetMapping("/vehicles/get-all")
-    public ResponseEntity<?> list() {
-        List<VehicleModel> vehicle = this.iVehicleService.getAllVehicles();
-        return new ResponseEntity<>(vehicle, HttpStatus.OK);
+    public VehicleController(VehicleService vehicleService) {
+        this.vehicleService = vehicleService;
+    }
+
+    @GetMapping("get-all")
+    public ResponseEntity<List<VehicleModel>> list() {
+        return new ResponseEntity<>(vehicleService.getAllVehicles(), HttpStatus.OK);
     }
 
     @PostMapping("/vehicles/new-vehicle")
-    public ResponseEntity<Map<String, String>> addVehicle(@RequestBody VehicleModel vehicle) {
-        int result = iVehicleService.pushVehicle(vehicle);
-
-        if (result > 0) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Vehículo creado con éxito");
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } else {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Error al crear el vehículo");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<VehicleModel> addVehicle(@RequestBody VehicleModel vehicle) {
+        return ResponseEntity.ok(vehicleService.createVehicle(vehicle));
     }
 }

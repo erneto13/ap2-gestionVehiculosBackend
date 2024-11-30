@@ -1,25 +1,43 @@
 package com.erneto13.sgfa_backend.service;
 
 import com.erneto13.sgfa_backend.model.VehicleModel;
-import com.erneto13.sgfa_backend.repository.IVehicleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.erneto13.sgfa_backend.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class VehicleService implements IVehicleService {
+public class VehicleService {
 
-    @Autowired
-    private IVehicleRepository iVehicleRepository;
+    private final VehicleRepository vehicleRepository;
 
-    @Override
-    public List<VehicleModel> getAllVehicles() {
-        return iVehicleRepository.getAllVehicles();
+    public VehicleService(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
     }
 
-    @Override
-    public int pushVehicle(VehicleModel vehicleModel) {
-        return iVehicleRepository.pushVehicle(vehicleModel);
+    public VehicleModel createVehicle(VehicleModel vehicle) {
+        return vehicleRepository.save(vehicle);
+    }
+
+    public List<VehicleModel> getAllVehicles() {
+        return vehicleRepository.findAll();
+    }
+
+    public Optional<VehicleModel> getVehicleById(Long id) {
+        return vehicleRepository.findById(id);
+    }
+
+    public VehicleModel updateVehicle(Long id, VehicleModel updatedVehicle) {
+        return vehicleRepository.findById(id)
+                .map(vehicle -> {
+                    updatedVehicle.setVehicle_id(id);
+                    return vehicleRepository.save(updatedVehicle);
+                })
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+    }
+
+    public void deleteVehicle(Long id) {
+        vehicleRepository.deleteById(id);
     }
 }

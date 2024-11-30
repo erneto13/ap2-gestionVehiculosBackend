@@ -1,13 +1,19 @@
 package com.erneto13.sgfa_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "vehicles")
 @Data
 public class VehicleModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vehicle_id;
     private String license_plate;
     private String brand;
