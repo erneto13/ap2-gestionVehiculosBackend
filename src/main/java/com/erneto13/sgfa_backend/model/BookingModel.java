@@ -15,14 +15,26 @@ public class BookingModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookings_id;
 
-    @Column(name = "vehicle_id", nullable = false)
+    @Column(name = "vehicle_id")
     private Long vehicle_id;
+
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id", insertable = false, updatable = false)
+    private VehicleModel vehicle;
 
     @Column(name = "driver_id")
     private Long driverId;
 
-    @Column(name = "client_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "driver_id", insertable = false, updatable = false)
+    private DriverModel driver;
+
+    @Column(name = "client_id")
     private Long contact_id;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", insertable = false, updatable = false)
+    private ContactModel contact;
 
     @Column(name = "start_date", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

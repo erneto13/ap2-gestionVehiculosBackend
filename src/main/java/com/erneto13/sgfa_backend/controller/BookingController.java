@@ -33,19 +33,11 @@ public class BookingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Obtener reservas por conductor
-    @GetMapping("/driver/{driverId}")
-    public ResponseEntity<List<BookingModel>> getBookingsByDriver(@PathVariable Long driverId) {
-        return ResponseEntity.ok(bookingService.getBookingsByDriver(driverId));
-    }
-
-    // Crear una nueva reserva
     @PostMapping
     public ResponseEntity<BookingModel> createBooking(@RequestBody BookingModel booking) {
         return ResponseEntity.ok(bookingService.saveBooking(booking));
     }
 
-    // Actualizar una reserva existente
     @PutMapping("/{id}")
     public ResponseEntity<BookingModel> updateBooking(@PathVariable Long id, @RequestBody BookingModel updatedBooking) {
         return bookingService.getBookingById(id)
