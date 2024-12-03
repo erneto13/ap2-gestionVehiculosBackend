@@ -24,8 +24,9 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
-    public Optional<VehicleModel> getVehicleById(Long id) {
-        return vehicleRepository.findById(id);
+    public VehicleModel getVehicleById(Long id) {
+        return vehicleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
     }
 
     public VehicleModel updateVehicle(Long id, VehicleModel updatedVehicle) {
