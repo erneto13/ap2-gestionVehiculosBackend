@@ -1,8 +1,6 @@
 package com.erneto13.sgfa_backend.controller;
 
-import com.erneto13.sgfa_backend.model.BookingModel;
 import com.erneto13.sgfa_backend.model.FuelRecordModel;
-import com.erneto13.sgfa_backend.model.VehicleModel;
 import com.erneto13.sgfa_backend.service.FuelRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +21,8 @@ public class FuelRecordController {
         this.fuelRecordService = fuelRecordService;
     }
 
-    @GetMapping("fuelrecord-list")
-    public ResponseEntity<List<FuelRecordModel>> getAllBookings() {
+    @GetMapping("list")
+    public ResponseEntity<List<FuelRecordModel>> getFuelRecords() {
         return new ResponseEntity<>(fuelRecordService.getAllFuelRecords(), HttpStatus.OK);
     }
 
