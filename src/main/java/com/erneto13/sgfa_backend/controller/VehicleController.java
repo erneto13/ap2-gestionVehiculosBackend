@@ -25,7 +25,7 @@ public class VehicleController {
         return new ResponseEntity<>(vehicleService.getAllVehicles(), HttpStatus.OK);
     }
 
-    @PostMapping("/vehicles/new-vehicle")
+    @PostMapping("/new-vehicle")
     public ResponseEntity<VehicleModel> addVehicle(@RequestBody VehicleModel vehicle) {
         return ResponseEntity.ok(vehicleService.createVehicle(vehicle));
     }
