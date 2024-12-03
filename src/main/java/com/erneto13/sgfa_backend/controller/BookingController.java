@@ -1,7 +1,9 @@
 package com.erneto13.sgfa_backend.controller;
 
 import com.erneto13.sgfa_backend.model.BookingModel;
+import com.erneto13.sgfa_backend.model.VehicleModel;
 import com.erneto13.sgfa_backend.service.BookingService;
+import com.erneto13.sgfa_backend.service.VehicleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,11 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final VehicleService vehicleService;
 
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingService bookingService, VehicleService vehicleService) {
         this.bookingService = bookingService;
+        this.vehicleService = vehicleService;
     }
 
     // Obtener todas las reservas
@@ -53,5 +57,11 @@ public class BookingController {
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/vehicle/{vehicleId}/bookings")
+    public List<BookingModel> getBookingsForVehicle(@PathVariable Long vehicleId) {
+        VehicleModel vehicle = vehicleService.getVehicleById(vehicleId);
+        return bookingService.getBookingsForVehicle(vehicle);
     }
 }
