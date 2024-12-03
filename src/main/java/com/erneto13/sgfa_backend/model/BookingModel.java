@@ -53,11 +53,22 @@ public class BookingModel {
     @Column(name = "destination_location", nullable = false)
     private String destination_location;
 
+    @Column(name = "origin_lat", nullable = false)
+    private double origin_lat;
+
+    @Column(name = "origin_lng", nullable = false)
+    private double origin_lng;
+
+    @Column(name = "destination_lat", nullable = false)
+    private double destination_lat;
+
+    @Column(name = "destination_lng", nullable = false)
+    private double destination_lng;
+
     @Column(name = "created_at", updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created_at;
 
-    @Column(name = "updated_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updated_at;
+    @Column(name = "notes", nullable = false)
+    private String notes;
 }
