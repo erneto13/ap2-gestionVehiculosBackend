@@ -61,4 +61,8 @@ public class BookingService {
     public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
     }
+
+    public List<BookingModel> getBookingsForVehicle(VehicleModel vehicle) {
+        return bookingRepository.findByVehicle(vehicle);
+    }
 }
