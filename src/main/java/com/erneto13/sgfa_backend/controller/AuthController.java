@@ -2,9 +2,14 @@ package com.erneto13.sgfa_backend.controller;
 
 import com.erneto13.sgfa_backend.dto.AuthRequestDto;
 import com.erneto13.sgfa_backend.dto.AuthResponseDto;
+import com.erneto13.sgfa_backend.dto.CreateCredentialsDto;
+import com.erneto13.sgfa_backend.model.DriverModel;
 import com.erneto13.sgfa_backend.model.UserModel;
+import com.erneto13.sgfa_backend.repository.DriverRepository;
 import com.erneto13.sgfa_backend.repository.UserRepository;
+import com.erneto13.sgfa_backend.service.EmailService;
 import com.erneto13.sgfa_backend.service.JwtUtilService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,36 +36,41 @@ public class AuthController {
 
     @Autowired
     private JwtUtilService jwtUtilService;
+
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private DriverRepository driverRepository;
+
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/login")
     public ResponseEntity<?> auth(@RequestBody AuthRequestDto authRequestDto) {
-
         try {
-            //1. Gestion authenticationManager
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    authRequestDto.getEmail(), authRequestDto.getPassword()
-            ));
+                    authRequestDto.getEmail(), authRequestDto.getPassword()));
 
-            //2. Validar el usuario en la bd
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(authRequestDto.getEmail());
             UserModel userModel = userRepository.findByEmail(authRequestDto.getEmail());
 
-            //3. Generar token
             String jwt = this.jwtUtilService.generateToken(userDetails, userModel.getRole());
             String refreshToken = this.jwtUtilService.generateRefreshToken(userDetails, userModel.getRole());
 
-            AuthResponseDto authResponseDto = new AuthResponseDto();
-            authResponseDto.setToken(jwt);
-            authResponseDto.setRefreshToken(refreshToken);
+            Map<String, Object> response = Map.of(
+                    "token", jwt,
+                    "refreshToken", refreshToken,
+                    "userDetails", userModel
+            );
 
-            return new ResponseEntity<AuthResponseDto>(authResponseDto, HttpStatus.OK);
-
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error Authetication:::" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error Authentication:::" + e.getMessage());
         }
-
     }
 
     @PostMapping("/refresh")
@@ -87,6 +98,25 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error refresh token:::" + e.getMessage());
         }
-
     }
+
+    @PostMapping("/admin/create-credentials")
+    public ResponseEntity<?> createCredentials(@RequestBody CreateCredentialsDto dto) throws MessagingException {
+        UserModel user = new UserModel();
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole("driver");
+
+        DriverModel driver = driverRepository.findById(dto.getDriverId())
+                .orElseThrow(() -> new RuntimeException("Driver not found"));
+        user.setDriver(driver);
+
+        userRepository.save(user);
+
+        emailService.sendEmail(dto.getEmail(), "Account Created",
+                "Your credentials are:\nEmail: " + dto.getEmail() + "\nPassword: " + dto.getPassword());
+
+        return ResponseEntity.ok("Credentials created and sent!");
+    }
+
 }
