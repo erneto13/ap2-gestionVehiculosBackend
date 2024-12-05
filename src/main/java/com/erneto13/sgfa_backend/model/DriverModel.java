@@ -12,6 +12,9 @@ public class DriverModel {
     private Long driver_id;
 
     @Column
+    private String profile_picture;
+
+    @Column
     private String name;
 
     @Column
