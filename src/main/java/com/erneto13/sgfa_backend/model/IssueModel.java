@@ -1,28 +1,46 @@
 package com.erneto13.sgfa_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@Entity
+@Table(name = "issues")
 public class IssueModel {
-    Integer idissues;
-    String title;
-    String description;
-    String issue_type;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer issues_id;
 
-    String status;
-    List<String> evidence;
-    String comments;
-    String reportedBy;
+    private String title;
+    private String description;
+
+    @Column(name = "issue_type")
+    private String issueType;
+
+    private String status;
+
+    @ElementCollection
+    @CollectionTable(name = "issue_evidence", joinColumns = @JoinColumn(name = "issue_id"))
+    @Column(name = "evidence")
+    private List<String> evidence;
+
+    private String comments;
+
+    @Column(name = "reported_by")
+    private String reportedBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime reportDate;
+    @Column(name = "report_date")
+    private LocalDateTime reportDate;
 
-    String resolvedBy;
+    @Column(name = "resolved_by")
+    private String resolvedBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime resolvedDate;
+    @Column(name = "resolved_date")
+    private LocalDateTime resolvedDate;
 }

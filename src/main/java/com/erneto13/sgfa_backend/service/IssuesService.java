@@ -1,60 +1,61 @@
 package com.erneto13.sgfa_backend.service;
 
 import com.erneto13.sgfa_backend.model.IssueModel;
-import com.erneto13.sgfa_backend.repository.IIssuesRepository;
+import com.erneto13.sgfa_backend.repository.IssuesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class IssuesService implements IIssuesService {
+public class IssuesService {
 
     @Autowired
-    private IIssuesRepository iIssuesRepository;
+    private IssuesRepository issuesRepository;
 
-    @Override
     public List<IssueModel> getAllIssues() {
-        return iIssuesRepository.findAll();
+        return issuesRepository.findAll();
     }
 
-    @Override
     public List<IssueModel> getIssueByType(String type) {
-        return iIssuesRepository.findByIssueType(type);
+        return issuesRepository.findByIssueType(type).stream()
+                .filter(issue -> issue.getStatus().equals("PENDING") ||
+                        issue.getStatus().equals("IN_PROGRESS"))
+                .collect(Collectors.toList());
     }
 
-    @Override
     public List<IssueModel> getIssueByStatus(String status) {
-        return iIssuesRepository.findByStatus(status);
+        return issuesRepository.findByStatus(status);
     }
 
-    @Override
     public List<IssueModel> getIssueByTypePerUser(String type, String user) {
-        return iIssuesRepository.findByIssueTypePerUser(type, user);
+        return issuesRepository.findByIssueTypeAndReportedByAndStatusIn(type, user, List.of("pending", "in_progress"));
     }
 
-    @Override
     public List<IssueModel> getClosedIssuesByUser(String user) {
-        return iIssuesRepository.findClosedIssuesByUser(user);
+        return issuesRepository.findByReportedByAndStatus(user, "closed");
     }
 
-    @Override
-    public int pushIssue(IssueModel issue) {
-        return iIssuesRepository.pushIssue(issue);
+    public IssueModel pushIssue(IssueModel issue) {
+        return issuesRepository.save(issue);
     }
 
-    @Override
-    public int updateStatus(int id, String status) {
-        return iIssuesRepository.updateIssueStatus(id, status);
+    public IssueModel updateStatus(int id, String status) {
+        IssueModel issue = issuesRepository.findById(id).orElseThrow(() -> new RuntimeException("Issue not found"));
+        issue.setStatus(status);
+        return issuesRepository.save(issue);
     }
 
-    @Override
-    public int resolveIssue(IssueModel issue) {
-        return iIssuesRepository.updateIssueResolution(issue);
+    public IssueModel resolveIssue(IssueModel issue) {
+        return issuesRepository.save(issue);
     }
 
-    @Override
+    public void deleteIssue(int id) {
+        issuesRepository.deleteById(id);
+    }
+
     public IssueModel getIssueById(int id) {
-        return iIssuesRepository.findById(id);
+        return issuesRepository.findById(id).orElseThrow(() -> new RuntimeException("Issue not found"));
     }
 }
