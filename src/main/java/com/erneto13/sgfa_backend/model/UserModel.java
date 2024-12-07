@@ -10,9 +10,8 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer user_id;
-    private String username;
-    private String password;
     private String email;
+    private String password;
     private String role;
 
     @OneToOne
