@@ -3,6 +3,7 @@ package com.erneto13.sgfa_backend.controller;
 import com.erneto13.sgfa_backend.dto.AuthRequestDto;
 import com.erneto13.sgfa_backend.dto.AuthResponseDto;
 import com.erneto13.sgfa_backend.dto.CreateCredentialsDto;
+import com.erneto13.sgfa_backend.dto.DriverMinimalDto;
 import com.erneto13.sgfa_backend.model.DriverModel;
 import com.erneto13.sgfa_backend.model.UserModel;
 import com.erneto13.sgfa_backend.repository.DriverRepository;
@@ -61,11 +62,23 @@ public class AuthController {
             String jwt = this.jwtUtilService.generateToken(userDetails, userModel.getRole());
             String refreshToken = this.jwtUtilService.generateRefreshToken(userDetails, userModel.getRole());
 
-            Map<String, Object> response = Map.of(
-                    "token", jwt,
-                    "refreshToken", refreshToken,
-                    "userDetails", userModel
-            );
+            Map<String, Object> response;
+            if (userModel.getDriver() != null) {
+                DriverMinimalDto driverMinimal = new DriverMinimalDto(
+                        userModel.getDriver().getName(),
+                        userModel.getDriver().getProfile_picture()
+                );
+                response = Map.of(
+                        "token", jwt,
+                        "refreshToken", refreshToken,
+                        "userDetails", driverMinimal
+                );
+            } else {
+                response = Map.of(
+                        "token", jwt,
+                        "refreshToken", refreshToken
+                );
+            }
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -105,18 +118,20 @@ public class AuthController {
         UserModel user = new UserModel();
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole("driver");
+
+        user.setRole(dto.getRole() != null ? dto.getRole() : "driver");
 
         DriverModel driver = driverRepository.findById(dto.getDriverId())
                 .orElseThrow(() -> new RuntimeException("Driver not found"));
+
         user.setDriver(driver);
 
         userRepository.save(user);
-
-        emailService.sendEmail(dto.getEmail(), "Account Created",
-                "Your credentials are:\nEmail: " + dto.getEmail() + "\nPassword: " + dto.getPassword());
+        emailService.sendEmail(driver.getEmail(), "Cuenta Creada",
+                "Tus credenciales son: \nCorreo: " + dto.getEmail() + "\nContraseña: " + dto.getPassword());
 
         return ResponseEntity.ok("Credentials created and sent!");
     }
 
+    //@GetMapping("/admin/drivers-with-credentials")
 }
