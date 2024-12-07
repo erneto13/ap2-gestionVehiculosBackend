@@ -7,6 +7,5 @@ public class CreateCredentialsDto {
     private Long driverId;
     private String email;
     private String password;
-
-
+    private String role;
 }
