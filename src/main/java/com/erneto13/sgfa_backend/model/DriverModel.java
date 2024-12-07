@@ -24,6 +24,9 @@ public class DriverModel {
     private String license_category;
 
     @Column
+    private String email;
+
+    @Column
     private String phone;
 
     @Column
