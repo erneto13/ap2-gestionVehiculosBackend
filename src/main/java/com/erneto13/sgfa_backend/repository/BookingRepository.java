@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<BookingModel, Long> {
     List<BookingModel> findByVehicle(VehicleModel vehicle);
+    List<BookingModel> findByDriverName(String name);
+    List<BookingModel> findByStatus(String status);
 }

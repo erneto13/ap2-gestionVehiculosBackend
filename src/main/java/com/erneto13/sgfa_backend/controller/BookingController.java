@@ -64,4 +64,18 @@ public class BookingController {
         VehicleModel vehicle = vehicleService.getVehicleById(vehicleId);
         return bookingService.getBookingsForVehicle(vehicle);
     }
+
+    @GetMapping("/driver/{name}")
+    public ResponseEntity<List<BookingModel>> getBookingsByDriverName(@PathVariable String name) {
+        List<BookingModel> bookings = bookingService.findBookingsByDriverName(name);
+        if (bookings.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/ongoing")
+    public List<BookingModel> getOnGoingBookings() {
+        return bookingService.getOnGoingBookings();
+    }
 }
