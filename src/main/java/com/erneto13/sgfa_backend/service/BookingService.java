@@ -65,4 +65,16 @@ public class BookingService {
     public List<BookingModel> getBookingsForVehicle(VehicleModel vehicle) {
         return bookingRepository.findByVehicle(vehicle);
     }
+
+    public List<BookingModel> findBookingsByDriverName(String name) {
+        return bookingRepository.findByDriverName(name);
+    }
+
+    public List<BookingModel> getOnGoingBookings() {
+        return bookingRepository.findByStatus("ON_GOING");
+    }
+
+    public List<BookingModel> findBookingsByDriverNameExcludeCancelled(String name) {
+        return bookingRepository.findByDriverNameAndStatusNot(name, "CANCELLED");
+    }
 }

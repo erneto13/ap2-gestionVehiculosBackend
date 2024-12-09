@@ -67,15 +67,28 @@ public class BookingController {
 
     @GetMapping("/driver/{name}")
     public ResponseEntity<List<BookingModel>> getBookingsByDriverName(@PathVariable String name) {
-        List<BookingModel> bookings = bookingService.findBookingsByDriverName(name);
+        List<BookingModel> bookings = bookingService.findBookingsByDriverNameExcludeCancelled(name);
         if (bookings.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
+
 
     @GetMapping("/ongoing")
     public List<BookingModel> getOnGoingBookings() {
         return bookingService.getOnGoingBookings();
     }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<BookingModel> updateBookingStatus(@PathVariable Long id, @RequestBody String status) {
+        return bookingService.getBookingById(id)
+                .map(existingBooking -> {
+                    existingBooking.setStatus(status);
+                    BookingModel updatedBooking = bookingService.saveBooking(existingBooking);
+                    return ResponseEntity.ok(updatedBooking);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }
