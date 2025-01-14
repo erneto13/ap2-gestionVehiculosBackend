@@ -1,6 +1,5 @@
 package com.erneto13.sgfa_backend.service;
 
-
 import com.erneto13.sgfa_backend.model.ContactModel;
 import com.erneto13.sgfa_backend.repository.IContactsResository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,8 +21,8 @@ public class ContactsService implements IContactsService {
 
     @Override
     public ContactModel getContactById(Long id) {
-        return contactRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("contact not found with id " + id));
+        return contactRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contact not found with id " + id));
     }
 
     @Override
@@ -34,8 +33,22 @@ public class ContactsService implements IContactsService {
     @Override
     public void deleteContact(Long id) {
         if (!contactRepository.existsById(id)) {
-            throw new EntityNotFoundException("contact not found with id: " + id);
+            throw new EntityNotFoundException("Contact not found with id: " + id);
         }
         contactRepository.deleteById(id);
+    }
+
+    public ContactModel updateContact(Long id, ContactModel contact) {
+        if (contactRepository.existsById(id)) {
+            contact.setContact_id(id);
+            return contactRepository.save(contact);
+        }
+        return null;
+    }
+
+    public ContactModel updateContactStatus(Long id, String status) {
+        ContactModel existingContact = getContactById(id);
+        existingContact.setStatus(status);
+        return contactRepository.save(existingContact);
     }
 }

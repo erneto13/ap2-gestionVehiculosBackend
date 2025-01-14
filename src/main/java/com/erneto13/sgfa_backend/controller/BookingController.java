@@ -67,7 +67,7 @@ public class BookingController {
 
     @GetMapping("/driver/{name}")
     public ResponseEntity<List<BookingModel>> getBookingsByDriverName(@PathVariable String name) {
-        List<BookingModel> bookings = bookingService.findBookingsByDriverNameExcludeCancelled(name);
+        List<BookingModel> bookings = bookingService.findBookingsByDriverNameExcludeCancelledAndCompleted(name);
         if (bookings.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

@@ -1,42 +1,55 @@
 package com.erneto13.sgfa_backend.controller;
 
 import com.erneto13.sgfa_backend.model.ContactModel;
-import com.erneto13.sgfa_backend.model.RemindersModel;
-import com.erneto13.sgfa_backend.service.IContactsService;
+import com.erneto13.sgfa_backend.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@CrossOrigin("*")
-@RequestMapping("api/v1/contacts")
+@RestController
+@RequestMapping("/api/contacts")
 public class ContactsController {
 
     @Autowired
-    IContactsService iContactsService;
+    private ContactsService contactsService;
 
     @GetMapping
-    public ResponseEntity<List<ContactModel>> getAllContacts() {
-        return new ResponseEntity<>(iContactsService.getAllContacts(), HttpStatus.OK);
+    public List<ContactModel> getAllContacts() {
+        return contactsService.getAllContacts();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ContactModel> getContactById(@PathVariable Long id) {
-        return new ResponseEntity<>(iContactsService.getContactById(id), HttpStatus.OK);
+        ContactModel contact = contactsService.getContactById(id);
+        return ResponseEntity.ok(contact);
     }
 
     @PostMapping
     public ResponseEntity<ContactModel> createContact(@RequestBody ContactModel contact) {
-        return new ResponseEntity<>(iContactsService.createContact(contact), HttpStatus.CREATED);
+        ContactModel createdContact = contactsService.createContact(contact);
+        return ResponseEntity.ok(createdContact);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ContactModel> updateContact(@PathVariable Long id, @RequestBody ContactModel updatedContact) {
+        ContactModel updated = contactsService.updateContact(id, updatedContact);
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updated);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ContactModel> updateContactStatus(@PathVariable Long id, @RequestParam String status) {
+        ContactModel updatedContact = contactsService.updateContactStatus(id, status);
+        return ResponseEntity.ok(updatedContact);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
-        iContactsService.deleteContact(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        contactsService.deleteContact(id);
+        return ResponseEntity.noContent().build();
     }
 }

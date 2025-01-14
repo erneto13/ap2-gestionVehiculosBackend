@@ -30,5 +30,5 @@ public class VehicleModel {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registration_date;
-    private String image_url;
+        private String image_url;
 }

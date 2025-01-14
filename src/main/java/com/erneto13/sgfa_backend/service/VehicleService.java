@@ -41,4 +41,12 @@ public class VehicleService {
     public void deleteVehicle(Long id) {
         vehicleRepository.deleteById(id);
     }
+
+    public VehicleModel changeVehicleStatus(Long vehicleId, String status) {
+        VehicleModel vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+
+        vehicle.setStatus(status);
+        return vehicleRepository.save(vehicle);
+    }
 }

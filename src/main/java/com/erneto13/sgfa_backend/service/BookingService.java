@@ -74,7 +74,7 @@ public class BookingService {
         return bookingRepository.findByStatus("ON_GOING");
     }
 
-    public List<BookingModel> findBookingsByDriverNameExcludeCancelled(String name) {
-        return bookingRepository.findByDriverNameAndStatusNot(name, "CANCELLED");
+    public List<BookingModel> findBookingsByDriverNameExcludeCancelledAndCompleted(String name) {
+        return bookingRepository.findByDriverNameAndStatusNotIn(name, List.of("CANCELLED", "COMPLETED"));
     }
 }
